@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Alert from './components/layout/Alert';
 import Navbar from './components/layout/Navbar';
 import Search from './components/users/Search';
 import Users from './components/users/Users';
@@ -8,6 +9,7 @@ class App extends Component {
   state = {
     loading: false,
     users: [],
+    alert: null,
   };
 
   searchUsers = async (text) => {
@@ -23,17 +25,24 @@ class App extends Component {
 
   clearUsers = () => this.setState({ users: [], loading: false });
 
+  showAlert = (msg, type) => {
+    this.setState({ alert: { msg, type } });
+    setTimeout(() => this.setState({ alert: null }), 3000);
+  };
+
   render() {
-    const { loading, users } = this.state;
+    const { loading, users, alert } = this.state;
 
     return (
       <div className='App'>
         <Navbar />
         <div className='container'>
+          <Alert alert={alert} />
           <Search
             searchUsers={this.searchUsers}
             clearUsers={this.clearUsers}
             showClearBtn={users.length > 0 ? true : false}
+            showAlert={this.showAlert}
           />
           <Users loading={loading} users={users} />
         </div>
