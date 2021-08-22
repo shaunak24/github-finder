@@ -33,6 +33,33 @@ const GithubState = (props) => {
     dispatch({ type: SEARCH_USERS, payload: data.items });
   };
 
+  // Get User data
+  const getUser = async (username) => {
+    setLoading();
+    const res = await fetch(
+      `https://api.github.com/users/${username}
+      ?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+      &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    const data = await res.json();
+    dispatch({ type: GET_USER, payload: data });
+  };
+
+  // Get User Repos
+  const getUserRepos = async (username) => {
+    setLoading();
+    const res = await fetch(
+      `https://api.github.com/users/${username}/repos?per_page=10&sort=created:asc
+      &client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+      &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    const data = await res.json();
+    dispatch({ type: GET_REPOS, payload: data });
+  };
+
+  // Clear Users
+  const clearUsers = () => dispatch({ type: CLEAR_USERS });
+
   const setLoading = () => dispatch({ type: SET_LOADING });
 
   return (
@@ -43,6 +70,9 @@ const GithubState = (props) => {
         repos: state.repos,
         loading: state.loading,
         searchUsers,
+        clearUsers,
+        getUserRepos,
+        getUser,
       }}
     >
       {props.children}
