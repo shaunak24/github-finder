@@ -16,18 +16,6 @@ export const App = () => {
   const [user, setUser] = useState({});
   const [alert, setAlert] = useState(null);
 
-  const searchUsers = async (text) => {
-    setLoading(true);
-    const res = await fetch(
-      `https://api.github.com/search/users?q=${text}
-      &client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
-      &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-    const data = await res.json();
-    setLoading(false);
-    setUsers(data.items);
-  };
-
   const getUser = async (username) => {
     setLoading(true);
     const res = await fetch(
@@ -77,7 +65,6 @@ export const App = () => {
                 render={(props) => (
                   <Fragment>
                     <Search
-                      searchUsers={searchUsers}
                       clearUsers={clearUsers}
                       showClearBtn={users.length > 0 ? true : false}
                       showAlert={showAlert}
